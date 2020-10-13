@@ -136,7 +136,7 @@ void EditPipes(vector<Pipe>& vecPipe)
     DisplayPipes(vecPipe);
     int num;
     num = inputNotNegativeInteger("Введите номер трубы: ");
-    if (num > vecPipe.size() || num < 0)
+    if (num > vecPipe.size() || num <= 0)
     {
         cout << "Такой трубы не существует! ";
     }
@@ -164,7 +164,7 @@ void EditCS(vector<CS>& vecCS)
     DisplayCS(vecCS);
     int num;
     num = inputNotNegativeInteger("Введите номер КС: ");
-    if (num > vecCS.size() || num < 0 )
+    if (num > vecCS.size() || num <= 0 )
     {
         cout << "Такой станции не существует! ";
     }
@@ -259,7 +259,6 @@ void InputFromFile( vector<CS>& vecCS,  vector<Pipe>& vecPipe)
             }
             else
             {
-                CS cs1;
                 cs1.id = ++MAX_ID_CS;
                 fin >> cs1.name;
                 fin >> cs1.number;
