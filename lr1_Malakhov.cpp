@@ -219,7 +219,7 @@ void OutputToFile(const vector<CS>& vecCS, const vector<Pipe>& vecPipe)
         fout << "Показатель эффективности: " << it.efficiency << endl << endl;
     }
    
-
+    i = 1;
     if (vecPipe.size() == 0) fout << "Нет труб!";
     for (auto& it : vecPipe)
     {
