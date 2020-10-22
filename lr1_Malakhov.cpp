@@ -24,7 +24,7 @@ struct Pipe
 struct CS
 {
     int id;
-    string name;
+    char name[100];
     int number;
     int numberOfAvailable;
     float efficiency;
@@ -35,13 +35,13 @@ struct CS
 
 bool isNotNegativeFloat(const string &s)
 {
-    const regex digit_regex("^[\+]?[0-9]+(\,[0-9])?[0-9]*$");
+    const regex digit_regex("^[\+]?[0-9]+(\,[0-9])?[0-9]*");
     return regex_match(s, digit_regex);
 }
 
 bool isNotNegativeInteger(const string &s)
 {
-    const regex digit_regex("^[\+]?[0-9]+$");
+    const regex digit_regex("^[\+]?[0-9]+");
     return regex_match(s, digit_regex);
     //+5 5 +25 +33 33 
 }
@@ -82,13 +82,26 @@ void AddPipe(vector<Pipe>& vecPipe)
     vecPipe.push_back(pipe1);
 }
 
+char* inputString(string msg)
+{
+    cout << msg;
+    char ch = 0;
+    char *str = new char[100];
+    int i = 0;
+    cin.ignore(1000, '\n');
+    while ((ch = cin.get()) != '\n') {
+        str[i++] = ch;
+        
+    }
+    str[i] = '\0';
+    return str;
+}
 
 void AddCS(vector<CS>& vecCS) 
 {
     CS cs1;
     cs1.id = ++MAX_ID_CS;
-    cout << "Введите наименование: ";
-    cin >> cs1.name;
+    strcpy_s(cs1.name, inputString("Введите наименование: "));
     cs1.number = inputNotNegativeInteger("Введите количество цехов: ");
     int cur = inputNotNegativeInteger("Введите количество цехов в работе: ");
     while (cur > cs1.number)
@@ -208,30 +221,35 @@ void OutputToFile(const vector<CS>& vecCS, const vector<Pipe>& vecPipe)
   
     ofstream fout;
     fout.open("output.txt");
-    int i = 1;
-    if (vecCS.size() == 0) fout << "Нет КС!";
-    for (auto& it : vecCS)
+    if (!fout.is_open())
+        cout << "Файл не может быть открыт!\n";
+    else
     {
-        fout << "Компрессорная станция №: " << i++ << endl;
-        fout << "Наименование: " << it.name << endl;
-        fout << "Количество цехов: " << it.number << endl;
-        fout << "Количество цехов в работе: " << it.numberOfAvailable << endl;
-        fout << "Показатель эффективности: " << it.efficiency << endl << endl;
-    }
-   
-    i = 1;
-    if (vecPipe.size() == 0) fout << "Нет труб!";
-    for (auto& it : vecPipe)
-    {
-        fout << "Труба №: " << i++ << endl;
-        fout << "Длина: " << it.length << endl;
-        fout << "Диаметр: " << it.diam << endl;
-        fout << (it.repaired ? "В ремонте !" : "Не в ремонте!");
-        fout << endl;
-    }
-    cout << "Вывели трубы и КС в файл output.txt";
+        int i = 1;
+        if (vecCS.size() == 0) fout << "Нет КС!";
+        for (auto& it : vecCS)
+        {
+            fout << "Компрессорная станция №: " << i++ << endl;
+            fout << "Наименование: " << it.name << endl;
+            fout << "Количество цехов: " << it.number << endl;
+            fout << "Количество цехов в работе: " << it.numberOfAvailable << endl;
+            fout << "Показатель эффективности: " << it.efficiency << endl << endl;
+        }
 
-    fout.close();
+        i = 1;
+        if (vecPipe.size() == 0) fout << "Нет труб!";
+        for (auto& it : vecPipe)
+        {
+            fout << "Труба №: " << i++ << endl;
+            fout << "Длина: " << it.length << endl;
+            fout << "Диаметр: " << it.diam << endl;
+            fout << (it.repaired ? "В ремонте !" : "Не в ремонте!");
+            fout << endl;
+        }
+        cout << "Вывели трубы и КС в файл output.txt";
+
+        fout.close();
+    }
 }
 
 void InputFromFile( vector<CS>& vecCS,  vector<Pipe>& vecPipe)
@@ -275,7 +293,7 @@ void InputFromFile( vector<CS>& vecCS,  vector<Pipe>& vecPipe)
 int main()
 {
 
-
+    
     setlocale(LC_ALL, "Russian");
     vector<CS> vecCS;
     vector<Pipe> vecPipe;
